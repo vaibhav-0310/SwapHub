@@ -12,7 +12,7 @@ import passportLocal from "passport";
 import session from "express-session";
 import cookieParser  from "cookie-parser";
 
-
+//express starting
 const app=express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
