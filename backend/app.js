@@ -6,6 +6,11 @@ import path from "path";
 import {dirname} from "path";
 import { fileURLToPath } from 'url';
 import product from './models/product.js';
+import user from "./models/user.js";
+import passport from "passport";
+import passportLocal from "passport";
+import session from "express-session";
+import cookieParser  from "cookie-parser";
 
 
 const app=express();
@@ -32,6 +37,24 @@ createDB()
     console.log(err);
 });
 
+//login session
+
+app.use(session({
+    secret: "e1f17a5213a0d9d77652466dfd2e18f1662d45b6e81a3fe341748ed8a4036638",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+    }}));
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+   passport.use(new passportLocal(User.authenticate()));
+   passport.serializeUser(user.serializeUser());
+   passport.deserializeUser(user.deserializeUser());
+
 //port listening
 app.listen(8080,()=>{
     console.log("server started");
@@ -50,12 +73,19 @@ app.get("/sell",(req,res)=>{
 
 app.post("/sell",async (req,res)=>{
     try{
-    console.log(req.body);
    const item= new product(req.body);
    await item.save();
-   console.log("data saved");
+   res.redirect("/buy");
     }
     catch(e){
-        console.log(e);
+        console.log(e); 
     }
 });
+
+//buy page
+
+app.get("/buy",async(req,res)=>{
+    let item = await product.find({});
+   res.render("layouts/buy.ejs",{item});
+});
+

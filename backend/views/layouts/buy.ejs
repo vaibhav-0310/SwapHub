@@ -1,0 +1,11 @@
+<% layout("/boilerplate/bolier.ejs") %>
+
+<div>
+    <% for(let items of item) {%>
+        <p><%= items.product %></p>
+        <p><%= items.price %></p>
+        <p><%= items.image %></p>
+        <p><%= items.college %></p>
+        <p><%= items.seller %></p>
+        <% } %>
+</div>

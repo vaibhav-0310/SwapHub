@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/vaibhav-0310/SwapHub#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "ejs-mate": "^4.0.0",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
     "mongoose": "^8.9.5",
     "passport": "^0.7.0"
   }
