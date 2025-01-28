@@ -5,6 +5,7 @@ import ejsmate from "ejs-mate";
 import path from "path";
 import {dirname} from "path";
 import { fileURLToPath } from 'url';
+import product from './models/product.js';
 
 
 const app=express();
@@ -47,6 +48,14 @@ app.get("/sell",(req,res)=>{
      res.render("layouts/sell.ejs");
 });
 
-app.post("/sell",(req,res)=>{
-    
-})
+app.post("/sell",async (req,res)=>{
+    try{
+    console.log(req.body);
+   const item= new product(req.body);
+   await item.save();
+   console.log("data saved");
+    }
+    catch(e){
+        console.log(e);
+    }
+});
