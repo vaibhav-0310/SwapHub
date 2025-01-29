@@ -1,0 +1,21 @@
+<% layout("/boilerplate/bolier.ejs") %>
+<body>
+    <div class="login-container">
+        <h1>Welcome</h1>
+        <img src="/images/swaphub2.jpg" alt="Logo">
+        <form action="/login" method="post">
+            <div class="input-field">
+                <input  placeholder="username" name="username" required>
+            </div>
+            <div class="input-field">
+                <input type="password" placeholder="Password" name="password" required>
+                <span class="toggle-password">&#128065;</span>
+            </div>
+            <button type="submit" class="login-btn">LOGIN</button>
+        </form>
+        <div class="signup-link">
+            Don’t have an account? <a href="/signup">Sign Up</a>
+        </div>
+    </div>
+</body>
+

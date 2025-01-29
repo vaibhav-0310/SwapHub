@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import ejsmate from "ejs-mate";
 import path from "path";
 import { fileURLToPath } from "url";
-import { Strategy as LocalStrategy } from "passport-local"; // Correct import
+import { Strategy as LocalStrategy } from "passport-local"; 
 import product from "./models/product.js";
 import User from "./models/user.js";
 import passport from "passport";
@@ -106,3 +106,22 @@ app.post("/signup", async (req, res) => {
         console.log(e);
     }
 });
+
+
+//login route
+app.get("/login",(req,res)=>{
+     res.render("users/login.ejs");
+});
+
+app.post("/login",passport.authenticate("local", {
+    failureRedirect: "/login", 
+    failureFlash: true
+  }),(req,res)=>{
+    try{
+    res.redirect("sell"); // to be changed later
+    }
+    catch(e){
+        console.log(e);
+    }
+  }
+)
