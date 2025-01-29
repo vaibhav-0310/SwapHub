@@ -1,15 +1,16 @@
 import mongoose from "mongoose";
-import passport from "passport";
+import passportLocalMongoose from "passport-local-mongoose";
 
-let User=mongoose.Schema({
+let userSchema=mongoose.Schema({
     email:{
         type:String,
         required:true,
     },
-    batch:String,
     block:String,
 });
 
-let user=mongoose.model("user",User);
+userSchema.plugin(passportLocalMongoose);
 
-export default user;
+let User=mongoose.model("user",userSchema);
+
+export default User;
