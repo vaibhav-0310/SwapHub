@@ -61,11 +61,16 @@ app.listen(8080, () => {
     console.log("Server started");
 });
 
-// Routes
+// home Routes
 app.get("/", (req, res) => {
     res.render("layouts/home.ejs");
 });
 
+app.get("/home",(req,res)=>{
+    res.redirect("/");
+});
+
+// sell route
 app.get("/sell", (req, res) => {
     res.render("layouts/sell.ejs");
 });
@@ -80,6 +85,8 @@ app.post("/sell", async (req, res) => {
     }
 });
 
+
+//buy route
 app.get("/buy", async (req, res) => {
     let item = await product.find({});
     res.render("layouts/buy.ejs", { item });
@@ -124,4 +131,19 @@ app.post("/login",passport.authenticate("local", {
         console.log(e);
     }
   }
-)
+);
+
+//donate route
+
+app.get("/donate",(req,res)=>{
+    res.json({donate:"isTrue"});
+});
+
+
+
+
+//error handling
+
+app.get("*",(req,res)=>{
+    res.status(404).send("404! Page Not Found");
+});
