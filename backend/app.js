@@ -9,6 +9,7 @@ import User from "./models/user.js";
 import passport from "passport";
 import session from "express-session";
 import cookieParser from "cookie-parser";
+import cors from "cors";  // Import the CORS package
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +21,13 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "/public")));
+
+// CORS setup
+app.use(cors({
+    origin: "http://localhost:5173", // Frontend origin (React is running on port 5173)
+    methods: ["GET", "POST"],  // Allow these methods
+    allowedHeaders: ["Content-Type"], // Allow these headers
+}));
 
 // Database Connection
 const createDB = async () => {
@@ -123,5 +131,4 @@ app.post("/login",passport.authenticate("local", {
     catch(e){
         console.log(e);
     }
-  }
-)
+  });
