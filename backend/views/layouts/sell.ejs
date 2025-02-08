@@ -1,10 +1,10 @@
 <% layout("/boilerplate/bolier.ejs") %>
 
 <form action="/sell" method="post">
-    <input name="product" placeholder="product name">
-    <input name="image" placeholder="image link">
-    <input name="seller" placeholder="Seller name">
-    <input name="college" placeholder="college name">
+    <input name="product" placeholder="product name" required>
+    <input name="image" placeholder="image link" required>
+    <input name="seller" placeholder="Seller name" required=>
+    <input name="college" placeholder="college name" required>
     <input name="price" placeholder="price">
     <button>Submit</button>
 </form>
