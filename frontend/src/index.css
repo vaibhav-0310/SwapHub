@@ -7,3 +7,33 @@ body{
 
 .container{width: 90%; margin: auto;}
 
+.swiper {
+    all: unset !important; /* Prevent Swiper from overriding Tailwind styles */
+  }
+  
+  .swiper-wrapper {
+    display: flex !important;
+  }
+  
+  .swiper-slide {
+    flex-shrink: 0 !important;
+    width: auto !important; /* Prevent Swiper from overriding width */
+  }
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    all: unset !important; /* Remove Swiper's default button styles */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+  
+  .swiper-button-prev {
+    left: -40px;
+  }
+  
+  .swiper-button-next {
+    right: -40px;
+  }
+  
