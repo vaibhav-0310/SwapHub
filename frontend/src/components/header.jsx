@@ -56,7 +56,7 @@ const Header = () => {
           {/* Logo */}
           <div className="col1">
             <Link to="/">
-              <img src="src/assets/icons/logo.png" alt="logo" className="w-20 h-16 rounded-full object-cover"/>
+              <img src="/assets/icons/logo.png" alt="logo" className="w-20 h-16 rounded-full object-cover"/>
             </Link>
           </div>
 
@@ -70,7 +70,7 @@ const Header = () => {
                 <ul className="flex items-center justify-start gap-4">
                 <li className='flex gap-1'>
             {/* Sign-in & Sign-up */}
-                <Link to="/signin">
+                <Link to="/login">
                 <Button className="!bg-[#ea683d] !text-white !font-bold !py-2 !px-6 !rounded-full !shadow-md hover:!bg-[#BB4F2D] hover:!shadow-lg !transition-all">
                 login / register
             </Button>
