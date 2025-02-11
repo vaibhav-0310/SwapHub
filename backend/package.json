@@ -19,6 +19,7 @@
   "homepage": "https://github.com/vaibhav-0310/SwapHub#readme",
   "dependencies": {
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "ejs-mate": "^4.0.0",
     "express": "^4.21.2",
     "express-session": "^1.18.1",

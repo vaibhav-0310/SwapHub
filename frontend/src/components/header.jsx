@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <header>
       {/* Top Bar */}
-      <div className="border-t border-b border-gray-200 py-2">
+      <div className="border-t border-b border-gray-100 py-2">
         <div className="w-[90%] mx-auto">
           <div className="flex items-center justify-between">
             <div className="w-1/2">
@@ -50,7 +50,7 @@ const Header = () => {
       </div>
 
       {/* Header Main Section */}
-      <div className="header bg-[#F2F2F2]">
+      <div className="header bg-[#bdbaba]">
         <div className="container flex items-center justify-between py-2 gap-x-6">
           
           {/* Logo */}
