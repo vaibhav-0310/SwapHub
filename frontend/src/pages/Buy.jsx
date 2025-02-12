@@ -20,12 +20,11 @@ const Buy = () => {
         { _id: 12, name: "External Hard Drive", price: "$129", description: "1TB SSD external drive", image: "https://via.placeholder.com/150" },
     ];
 
-    // ✅ Commented out Backend API Call
-    // useEffect(() => {
-    //     axios.get("http://localhost:5000/products")
-    //         .then(response => setProducts(response.data))
-    //         .catch(error => console.error("Error fetching products:", error));
-    // }, []);
+    useEffect(() => {
+        axios.get("http://localhost:5000/buy")
+            .then(response => setProducts(response.data))
+            .catch(error => console.error("Error fetching products:", error));
+    }, []);
 
     const addToCart = (product) => {
         setCart([...cart, product]);

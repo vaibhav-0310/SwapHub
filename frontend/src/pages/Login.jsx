@@ -1,9 +1,13 @@
 import { useState } from "react";
+import Header from '../components/header';
+import Footer from '../components/footer';
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
+    <>
+        <Header/>
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-96 p-8 bg-white rounded-xl shadow-md text-center">
         <h1 className="text-2xl mb-5 font-bold">Welcome</h1>
@@ -52,5 +56,7 @@ export default function Login() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
