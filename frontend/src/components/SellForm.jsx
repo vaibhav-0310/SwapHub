@@ -6,9 +6,9 @@ const SellForm = () => {
   const [formData, setFormData] = useState({
     product: "",
     image: "",
-    seller: "",
-    college: "",
+    description: "",
     price: "",
+    seller: "654321abcdef",
   });
 
   const handleChange = (e) => {
@@ -18,12 +18,22 @@ const SellForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/products/upload", formData);
+      await axios.post("http://localhost:8080/api/sell", formData);
       alert("Product uploaded successfully!");
-      setFormData({ product: "", image: "", seller: "", college: "", price: "" });
+      setFormData({ product: "", image: "", description: "", price: "", seller: "654321abcdef" });
     } catch (error) {
-      console.error("Error uploading product", error);
-    }
+      console.error("Error:", error);
+      if (error.response) {
+          console.error("Server Response:", error.response.data); // Log server error response
+          alert(`Error: ${error.response.data.message || "Failed to list product."}`);
+      } else if (error.request) {
+          console.error("No response received:", error.request);
+          alert("No response from the server. Check if the backend is running.");
+      } else {
+          console.error("Error setting up request:", error.message);
+          alert("Error setting up the request.");
+      }
+  }
   };
 
   return (
@@ -40,24 +50,24 @@ const SellForm = () => {
           required
         />
 
-        <label className="block font-bold text-gray-700 mt-4">Seller Name</label>
+        <label className="block font-bold text-gray-700 mt-4">Image URL</label>
         <input
           type="text"
-          name="seller"
-          value={formData.seller}
+          name="image"
+          value={formData.image}
           onChange={handleChange}
           className="w-full border p-2 rounded-md mt-1 bg-white"
           required
         />
 
-        <label className="block font-bold text-gray-700 mt-4">College Name</label>
-        <input
-          type="text"
-          name="college"
-          value={formData.college}
-          onChange={handleChange}
-          className="w-full border p-2 rounded-md mt-1 bg-white"
-          required
+        <label className="block font-bold text-gray-700 mt-4">Description</label>
+        <textarea 
+          name="description" 
+          placeholder="Description" 
+          value={formData.description} 
+          onChange={handleChange} 
+          className="w-full p-2 border rounded mb-3" 
+          required 
         />
 
         <label className="block font-bold text-gray-700 mt-4">Price (Rs)</label>
