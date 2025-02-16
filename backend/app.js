@@ -37,10 +37,10 @@ createDB()
         console.log(err);
     });
 
-// Login Sessio
+// Login Session
 
 app.use(session({
-    secret: "KiraStorage",
+    secret: "vsggykjhfdszghgjhgbfdxgfhgjhfgdrsetygfd",
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -53,7 +53,7 @@ app.use(session({
     passport.use(new Google({
        clientID: process.env.CLIENTID,
        clientSecret: process.env.CLIENT_SECRET,
-       callbackURL: "http://localhost:8080/auth/google/callback",
+       callbackURL: "http://localhost:5173/auth/google/callback",
    },
    (accessToken,refreshToken,profile,done)=>{
        return done(null,profile)
@@ -65,7 +65,6 @@ app.use(session({
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
  
-//google login
 //google login
 app.get("/auth/google", passport.authenticate('google', {scope: ['profile','email']}));
 
@@ -110,8 +109,6 @@ app.get("/api/buy", async (req, res) => {
 });
 
 
-
-    
 
 //sell api
 app.post("/sell", async (req, res) => {
