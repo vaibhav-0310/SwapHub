@@ -4,6 +4,7 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import CategoryCarousel from '../components/categorycarousel';
 import Buy from './Buy';
+import { useEffect } from 'react';
 
 const Home = () => {
   return (

@@ -6,6 +6,7 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  
 
   return (
     <>
@@ -49,12 +50,18 @@ export default function Login() {
             LOGIN
           </button>
         </form>
-        <div className="mt-4">
-            <a href="/auth/google" className="text-gray-700 text-lg flex justify-center items-center gap-2">
-              <FontAwesomeIcon icon={faGoogle} className="text-red-500" size="lg" />
-              Sign in with Google
-            </a>
-          </div>
+        <div className="mt-4 flex justify-center">
+  <button
+    onClick={() => window.location.href = "http://localhost:8080/auth/google"}
+    className="flex items-center gap-2 text-lg text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition"
+  >
+    <FontAwesomeIcon icon={faGoogle} className="text-red-500" size="lg" />
+    Sign in with Google
+  </button>
+</div>
+
+
+          
         <div className="mt-4 text-sm">
           Don’t have an account?{' '}
           <a href="/signup" className="text-blue-400 hover:underline">

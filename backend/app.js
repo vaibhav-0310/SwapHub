@@ -17,8 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middlewares
-app.use(cors({ origin: 'http://localhost:5000',
-    credentials: true}));
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(express.static(path.join(__dirname, "public")));
@@ -37,10 +36,10 @@ createDB()
         console.log(err);
     });
 
-// Login Sessio
+// Login Session
 
 app.use(session({
-    secret: "KiraStorage",
+    secret: "vsggykjhfdszghgjhgbfdxgfhgjhfgdrsetygfd",
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -65,7 +64,6 @@ app.use(session({
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());
  
-//google login
 //google login
 app.get("/auth/google", passport.authenticate('google', {scope: ['profile','email']}));
 
@@ -111,10 +109,8 @@ app.get("/api/buy", async (req, res) => {
 
 
 
-    
-
 //sell api
-app.post("/sell", async (req, res) => {
+app.post("/api/sell", async (req, res) => {
     try {
         const item = new product(req.body);
         await item.save();
