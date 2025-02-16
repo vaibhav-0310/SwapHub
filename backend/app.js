@@ -9,7 +9,7 @@ import passport from "passport";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as Google } from "passport-google-oauth20";
 import 'dotenv/config';
 
 const app = express();
@@ -17,7 +17,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middlewares
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:5000',
+    credentials: true}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(express.static(path.join(__dirname, "public")));
@@ -36,41 +37,61 @@ createDB()
         console.log(err);
     });
 
-// Login Session
-app.use(
-    session({
-        secret: "e1f17a5213a0d9d77652466dfd2e18f1662d45b6e81a3fe341748ed8a4036638",
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            httpOnly: true,
-        },
-    })
-);
+// Login Sessio
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Passport Strategy
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
+app.use(session({
+    secret: "KiraStorage",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+    }}));
+    app.use(passport.initialize());
+    app.use(passport.session());
+    passport.use(new Google({
+       clientID: process.env.CLIENTID,
+       clientSecret: process.env.CLIENT_SECRET,
+       callbackURL: "http://localhost:8080/auth/google/callback",
+   },
+   (accessToken,refreshToken,profile,done)=>{
+       return done(null,profile)
+   }));
+   passport.serializeUser((user,done)=> done(null,user));
+   passport.deserializeUser((user,done)=>done(null,user));  
+    
+    passport.use(new LocalStrategy(User.authenticate()));
+    passport.serializeUser(User.serializeUser());
+    passport.deserializeUser(User.deserializeUser());
+ 
 //google login
+//google login
+app.get("/auth/google", passport.authenticate('google', {scope: ['profile','email']}));
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENTID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:5000/auth/google/callback",
-},
-(accessToken,refreshToken,profile,done)=>{
-    return done(null,profile)
-}));
+app.get(
+   "/auth/google/callback",
+   passport.authenticate('google', { failureRedirect: '/home' }),
+   async (req, res) => {
+     const googleProfile = req.user;
+     const username = googleProfile.displayName;
+     const email = googleProfile.emails[0].value;
+ 
+       let user = await User.findOne({ email });
+       if (!user) {  
+         user = new User({
+           username,
+           email,
+         });
+         await user.save();
+       }
+       req.login(user, (err) => {
+         if (err) return next(err);
+         res.redirect("/home");
+       });
+     } 
+ );
 
-passport.serializeUser((user,done)=> done(null,user));
-passport.deserializeUser((user,done)=>done(null,user));
 
 // Serve React App for all routes
 app.get("*", (req, res) => {
@@ -89,31 +110,8 @@ app.get("/api/buy", async (req, res) => {
 });
 
 
-//login api
-app.get('/auth/google',
-    passport.authenticate('google', { scope: ['profile','email'] }));
 
-    app.get('/auth/google/callback', 
-        passport.authenticate('google', { failureRedirect: '/login' }),
-        async function(req, res) {
-            const googleProfile = req.user;
-            const username = googleProfile.displayName;
-            const email = googleProfile.emails[0].value;
-        
-              let user = await User.findOne({ email });
-              if (!user) {  
-                user = new User({
-                  username,
-                  email,
-                  cart: [], 
-                });
-                await user.save();
-              }
-              req.login(user, (err) => {
-                if (err) return next(err);
-                res.redirect("/home");
-              });
-});
+    
 
 //sell api
 app.post("/sell", async (req, res) => {
@@ -134,8 +132,8 @@ app.get("/api/donate", (req, res) => {
 // Sign-Up API
 app.post("/api/signup", async (req, res) => {
     try {
-        const { username, email, password, block } = req.body;
-        const newUser = new User({ email, username, block });
+        const { username, email, password} = req.body;
+        const newUser = new User({ email, username});
         const reg = await User.register(newUser, password);
         req.login(reg, (err) => {
             if (err) {
@@ -159,7 +157,7 @@ app.get("/api/login",(req,res)=>{
      res.redirect("localhost5173/sell");
 });
 // Port Listening
-app.listen(5000, () => {
-    console.log("Server started on http://localhost:5000");
+app.listen(8080, () => {
+    console.log("Server started");
 });
 
