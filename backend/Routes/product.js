@@ -3,7 +3,6 @@ import Product from "../models/product.js";
 
 const router = express.Router();
 
-// 🛒 Add a New Product (Seller Listing)
 router.post("/add", async (req, res) => {
     try {
         const { product, image, description, seller,  price, category } = req.body;
@@ -12,8 +11,7 @@ router.post("/add", async (req, res) => {
             product,
             image,
             description,
-            seller, // Seller's ID (should come from authentication)
-            
+            seller, 
             price,
             category
         });

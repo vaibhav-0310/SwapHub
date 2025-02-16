@@ -17,8 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middlewares
-app.use(cors({ origin: 'http://localhost:5000',
-    credentials: true}));
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(express.static(path.join(__dirname, "public")));
@@ -53,7 +52,7 @@ app.use(session({
     passport.use(new Google({
        clientID: process.env.CLIENTID,
        clientSecret: process.env.CLIENT_SECRET,
-       callbackURL: "http://localhost:5173/auth/google/callback",
+       callbackURL: "http://localhost:8080/auth/google/callback",
    },
    (accessToken,refreshToken,profile,done)=>{
        return done(null,profile)
@@ -111,7 +110,7 @@ app.get("/api/buy", async (req, res) => {
 
 
 //sell api
-app.post("/sell", async (req, res) => {
+app.post("/api/sell", async (req, res) => {
     try {
         const item = new product(req.body);
         await item.save();
