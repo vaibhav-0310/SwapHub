@@ -9,6 +9,8 @@ import passport from "passport";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import 'dotenv/config';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -56,6 +58,20 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//google login
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENTID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "http://localhost:5000/auth/google/callback",
+},
+(accessToken,refreshToken,profile,done)=>{
+    return done(null,profile)
+}));
+
+passport.serializeUser((user,done)=> done(null,user));
+passport.deserializeUser((user,done)=>done(null,user));
+
 // Serve React App for all routes
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "dist", "index.html"));
@@ -73,8 +89,34 @@ app.get("/api/buy", async (req, res) => {
 });
 
 
+//login api
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile','email'] }));
 
-app.post("/api/sell", async (req, res) => {
+    app.get('/auth/google/callback', 
+        passport.authenticate('google', { failureRedirect: '/login' }),
+        async function(req, res) {
+            const googleProfile = req.user;
+            const username = googleProfile.displayName;
+            const email = googleProfile.emails[0].value;
+        
+              let user = await User.findOne({ email });
+              if (!user) {  
+                user = new User({
+                  username,
+                  email,
+                  cart: [], 
+                });
+                await user.save();
+              }
+              req.login(user, (err) => {
+                if (err) return next(err);
+                res.redirect("/home");
+              });
+});
+
+//sell api
+app.post("/sell", async (req, res) => {
     try {
         const item = new product(req.body);
         await item.save();
@@ -112,7 +154,12 @@ app.post("/api/login", passport.authenticate("local"), (req, res) => {
     res.json({ message: "Login successful" });
 });
 
+app.get("/api/login",(req,res)=>{
+     console.log("login succesfull");
+     res.redirect("localhost5173/sell");
+});
 // Port Listening
 app.listen(5000, () => {
     console.log("Server started on http://localhost:5000");
 });
+

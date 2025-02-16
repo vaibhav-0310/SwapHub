@@ -1,9 +1,10 @@
 import React from "react";
 import SellForm from "../components/SellForm";
-
+import { useState } from "react";
+import axios from "axios";
 const Sell = () => {
     const [product, setProduct] = useState({
-        name: "",
+        product: "",
         image: "",
         description: "",
         price: "",
@@ -33,6 +34,7 @@ const Sell = () => {
                 <input type="text" name="image" placeholder="Image URL" value={product.image} onChange={handleChange} className="w-full p-2 border rounded mb-3" required />
                 <textarea name="description" placeholder="Description" value={product.description} onChange={handleChange} className="w-full p-2 border rounded mb-3" required />
                 <input type="number" name="price" placeholder="Price" value={product.price} onChange={handleChange} className="w-full p-2 border rounded mb-3" required />
+                <input type="text" name="seller" placeholder="Seller name" value={product.image} onChange={handleChange} className="w-full p-2 border rounded mb-3" required />
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">List Product</button>
             </form>
         </div>
@@ -51,7 +53,7 @@ export default Sell;
 //         image: "",
 //         description: "",
 //         price: "",
-//         seller: "654321abcdef", // Replace with the logged-in seller's ID later
+//         seller: "654321abcdef", 
 //     });
 
 //     const handleChange = (e) => {
@@ -61,7 +63,7 @@ export default Sell;
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
 //         try {
-//             await axios.post("http://localhost:5000/products/add", product);
+//             await axios.post("http://localhost:5000/sell", product);
 //             alert("Product listed successfully!");
 //             setProduct({ name: "", image: "", description: "", price: "" });
 //         } catch (error) {

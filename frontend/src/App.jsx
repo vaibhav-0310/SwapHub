@@ -6,6 +6,7 @@ import Home from "./pages/home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Donate from "./pages/Donate";
+import SellForm from "./components/SellForm";
 
 const App = () => {
   return (
