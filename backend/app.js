@@ -1,33 +1,27 @@
 import express from "express";
 import mongoose from "mongoose";
-import ejsmate from "ejs-mate";
 import path from "path";
 import { fileURLToPath } from "url";
-import { Strategy as LocalStrategy } from "passport-local"; 
+import { Strategy as LocalStrategy } from "passport-local";
 import product from "./models/product.js";
 import User from "./models/user.js";
 import passport from "passport";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import cors from "cors";  // Import the CORS package
+import cors from "cors";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import 'dotenv/config';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middlewares
-app.engine("ejs", ejsmate);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "/public")));
-
-// CORS setup
-app.use(cors({
-    origin: "http://localhost:5173", // Frontend origin (React is running on port 5173)
-    methods: ["GET", "POST"],  // Allow these methods
-    allowedHeaders: ["Content-Type"], // Allow these headers
-}));
+app.use(express.json()); // Parse JSON request bodies
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "build"))); // Serve React app
 
 // Database Connection
 const createDB = async () => {
@@ -59,100 +53,113 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Correct Passport Strategy Usage
-passport.use(new LocalStrategy(User.authenticate())); 
+// Passport Strategy
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Port Listening
-app.listen(8080, () => {
-    console.log("Server started");
+//google login
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENTID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "http://localhost:5000/auth/google/callback",
+},
+(accessToken,refreshToken,profile,done)=>{
+    return done(null,profile)
+}));
+
+passport.serializeUser((user,done)=> done(null,user));
+passport.deserializeUser((user,done)=>done(null,user));
+
+// Serve React App for all routes
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
-// home Routes
-app.get("/", (req, res) => {
-    res.render("layouts/home.ejs");
+// API Endpoints
+app.get("/api/buy", async (req, res) => {
+    try {
+        const items = await product.find({});
+        res.json({ items });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
-app.get("/home",(req,res)=>{
-    res.redirect("/");
+
+//login api
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile','email'] }));
+
+    app.get('/auth/google/callback', 
+        passport.authenticate('google', { failureRedirect: '/login' }),
+        async function(req, res) {
+            const googleProfile = req.user;
+            const username = googleProfile.displayName;
+            const email = googleProfile.emails[0].value;
+        
+              let user = await User.findOne({ email });
+              if (!user) {  
+                user = new User({
+                  username,
+                  email,
+                  cart: [], 
+                });
+                await user.save();
+              }
+              req.login(user, (err) => {
+                if (err) return next(err);
+                res.redirect("/home");
+              });
 });
 
-// sell route
-app.get("/sell", (req, res) => {
-    res.render("layouts/sell.ejs");
-});
-
+//sell api
 app.post("/sell", async (req, res) => {
     try {
         const item = new product(req.body);
         await item.save();
-        res.redirect("/buy");
+        res.status(201).json({ message: "Item added successfully" });
     } catch (e) {
         console.log(e);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
-
-//buy route
-app.get("/buy", async (req, res) => {
-    let item = await product.find({});
-    res.render("layouts/buy.ejs", { item });
+app.get("/api/donate", (req, res) => {
+    res.json({ donate: "isTrue" });
 });
 
-// Sign-Up Page
-app.get("/signup", (req, res) => {
-    res.render("Users/signup.ejs");
-});
-
-app.post("/signup", async (req, res) => {
+// Sign-Up API
+app.post("/api/signup", async (req, res) => {
     try {
-        let { username, email, password, block } = req.body;
-        let newUser = new User({ email, username, block });
-        console.log(newUser);
-        let reg = await User.register(newUser, password);
+        const { username, email, password, block } = req.body;
+        const newUser = new User({ email, username, block });
+        const reg = await User.register(newUser, password);
         req.login(reg, (err) => {
             if (err) {
-                return next(err);
+                return res.status(500).json({ error: "Login failed" });
             }
-            res.redirect("/sell"); // Redirect to be changed later
+            res.status(201).json({ message: "User registered successfully" });
         });
     } catch (e) {
         console.log(e);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
-
-//login route
-app.get("/login",(req,res)=>{
-     res.render("users/login.ejs");
+// Login API
+app.post("/api/login", passport.authenticate("local"), (req, res) => {
+    res.json({ message: "Login successful" });
 });
 
-app.post("/login",passport.authenticate("local", {
-    failureRedirect: "/login", 
-    failureFlash: true
-  }),(req,res)=>{
-    try{
-    res.redirect("sell"); // to be changed later
-    }
-    catch(e){
-        console.log(e);
-    }
-
-  }
-);
-
-//donate route
-
-app.get("/donate",(req,res)=>{
-    res.json({donate:"isTrue"});
+app.get("/api/login",(req,res)=>{
+     console.log("login succesfull");
+     res.redirect("localhost5173/sell");
+});
+// Port Listening
+app.listen(5000, () => {
+    console.log("Server started on http://localhost:5000");
 });
 
-
-
-
-//error handling
-
-app.get("*",(req,res)=>{
-    res.status(404).send("404! Page Not Found");
-});

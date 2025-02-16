@@ -2,10 +2,11 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Buy from "./pages/Buy";
 import Sell from "./pages/Sell";
-import Home from "./pages/Home";
+import Home from "./pages/home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Donate from "./pages/Donate";
+import SellForm from "./components/SellForm";
 
 const App = () => {
   return (

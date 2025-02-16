@@ -14,18 +14,12 @@ const ProductSchema = new mongoose.Schema({
         required: true
     },
     seller: {
-        type: mongoose.Schema.Types.ObjectId, // Reference to Seller (User)
-        ref: "User",
+        type: String,
         required: true
     },
 
     price: {
         type: Number,
-        required: true
-    },
-    category: {
-        type: String,
-        enum: ["Electronics", "Books", "Furniture", "Accessories", "Other"], // Optional categories
         required: true
     },
     createdAt: {

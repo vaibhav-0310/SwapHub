@@ -8,10 +8,8 @@ import Buy from './Buy';
 const Home = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* ✅ Header */}
-      <Header />
 
-      {/* ✅ Main Content */}
+      <Header />
       <main className="flex-grow bg-gray-100">
         {/* ✅ Category Carousel */}
         <section className="py-6">

@@ -1,9 +1,14 @@
 import { useState } from "react";
+import Header from '../components/header';
+import Footer from '../components/footer';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
+    <>
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="w-96 p-8 bg-white rounded-xl shadow-md text-center">
         <h1 className="text-2xl mb-5 font-bold">Welcome</h1>
@@ -44,6 +49,12 @@ export default function Login() {
             LOGIN
           </button>
         </form>
+        <div className="mt-4">
+            <a href="/auth/google" className="text-gray-700 text-lg flex justify-center items-center gap-2">
+              <FontAwesomeIcon icon={faGoogle} className="text-red-500" size="lg" />
+              Sign in with Google
+            </a>
+          </div>
         <div className="mt-4 text-sm">
           Don’t have an account?{' '}
           <a href="/signup" className="text-blue-400 hover:underline">
@@ -52,5 +63,6 @@ export default function Login() {
         </div>
       </div>
     </div>
+    </>
   );
 }

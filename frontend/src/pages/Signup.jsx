@@ -1,3 +1,4 @@
+
 export default function Signup() {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -46,6 +47,7 @@ export default function Signup() {
                 SIGN UP
               </button>
             </form>
+           
             <div className="mt-4 text-sm">
               Already have an account?{' '}
               <a href="/login" className="text-blue-400 hover:underline">
