@@ -10,10 +10,14 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import { Strategy as Google } from "passport-google-oauth20";
 import 'dotenv/config';
+import major from "./Routes/major.js";
+import login from "./Routes/login.js";
+import googlelogin from "./Routes/googlelogin.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const Port = process.env.PORT || 8080;
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -57,96 +61,22 @@ app.use(session({
    }));
    passport.serializeUser((user,done)=> done(null,user));
    passport.deserializeUser((user,done)=>done(null,user));  
-    
-    passport.use(new LocalStrategy(User.authenticate()));
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
+   passport.use(new LocalStrategy(User.authenticate()));
+   passport.serializeUser(User.serializeUser());
+   passport.deserializeUser(User.deserializeUser());
  
-//google login
-app.get("/auth/google", passport.authenticate('google', {scope: ['profile','email']}));
-
-app.get(
-   "/auth/google/callback",
-   passport.authenticate('google', { failureRedirect: '/home' }),
-   async (req, res) => {
-     const googleProfile = req.user;
-     const username = googleProfile.displayName;
-     const email = googleProfile.emails[0].value;
- 
-       let user = await User.findOne({ email });
-       if (!user) {  
-         user = new User({
-           username,
-           email,
-         });
-         await user.save();
-       }
-       req.login(user, (err) => {
-         if (err) return next(err);
-         res.redirect("/home");
-       });
-     } 
- );
-
-
-// API Endpoints
-app.get("/api/buy", async (req, res) => {
-    try {
-        const items = await product.find({});
-        res.send(items);
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
 
 
 
-//sell api
-app.post("/api/sell", async (req, res) => {
-    try {
-        const item = new product(req.body);
-        await item.save();
-        res.status(201).json({ message: "Item added successfully" });
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
+//All routes from Routes folder to check routes
+app.use(major);
+app.use(login);
+app.use(googlelogin)
 
-app.get("/api/donate", (req, res) => {
-    res.json({ donate: "isTrue" });
-});
 
-// Sign-Up API
-app.post("/api/signup", async (req, res) => {
-    try {
-        const { username, email, password} = req.body;
-        const newUser = new User({ email, username});
-        const reg = await User.register(newUser, password);
-        req.login(reg, (err) => {
-            if (err) {
-                return res.status(500).json({ error: "Login failed" });
-            }
-            res.status(201).json({ message: "User registered successfully" });
-        });
-    } catch (e) {
-        console.log(e);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
 
-// Login API
-app.post("/api/login", passport.authenticate("local"), (req, res) => {
-    res.json({ message: "Login successful" });
-});
-
-app.get("/api/login",(req,res)=>{
-     console.log("login succesfull");
-     res.redirect("localhost5173/sell");
-});
 // Port Listening
-app.listen(8080, () => {
+app.listen(Port , () => {
     console.log("Server started");
 });
 
