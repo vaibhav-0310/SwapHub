@@ -18,7 +18,7 @@ const SellForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/sell", formData);
+      await axios.post("/api/sell", formData);
       alert("Product uploaded successfully!");
       setFormData({ product: "", image: "", description: "", price: "", seller: "654321abcdef" });
     } catch (error) {

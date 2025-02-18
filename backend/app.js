@@ -8,7 +8,6 @@ import User from "./models/user.js";
 import passport from "passport";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import cors from "cors";
 import { Strategy as Google } from "passport-google-oauth20";
 import 'dotenv/config';
 
@@ -17,11 +16,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middlewares
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "build"))); // Serve React app
+
 
 // Database Connection
 const createDB = async () => {
@@ -91,16 +89,11 @@ app.get(
  );
 
 
-// Serve React App for all routes
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
 // API Endpoints
 app.get("/api/buy", async (req, res) => {
     try {
         const items = await product.find({});
-        res.json({ items });
+        res.send(items);
     } catch (e) {
         console.log(e);
         res.status(500).json({ error: "Internal Server Error" });
