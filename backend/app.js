@@ -13,6 +13,8 @@ import 'dotenv/config';
 import major from "./Routes/major.js";
 import login from "./Routes/login.js";
 import googlelogin from "./Routes/googlelogin.js";
+import cors from "cors";
+
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +25,7 @@ const Port = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(cors());
 
 // Database Connection
 const createDB = async () => {
@@ -72,6 +74,10 @@ app.use(session({
 app.use(major);
 app.use(login);
 app.use(googlelogin)
+
+app.get("/home",(req,res)=>{
+    res.redirect("http://localhost:5173/");
+});
 
 
 
