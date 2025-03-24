@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
-const ProductSchema = new mongoose.Schema({
-    product: {
+const adSchema = new mongoose.Schema({
+    title: {
         type: String,
         required: true
     },
-    image: {
+    poster: {
         type: String, // Changed to a direct string for easier access
         required: true
     },
@@ -13,13 +13,8 @@ const ProductSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    category: {
+    PostedBy: {
         type: String,
-        required: true
-    },
-    
-    price: {
-        type: Number,
         required: true
     },
     createdAt: {
@@ -32,5 +27,5 @@ const ProductSchema = new mongoose.Schema({
     }
 });
 
-const Product = mongoose.model("Product", ProductSchema);
-export default Product;
+const Ad = mongoose.model("ad", adSchema);
+export default Ad;

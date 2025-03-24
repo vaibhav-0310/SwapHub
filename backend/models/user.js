@@ -6,7 +6,9 @@ let userSchema=mongoose.Schema({
         type:String,
         required:true,
     },
-    block:String,
+    college:{
+    type:String},
+    picture:String,
 });
 
 userSchema.plugin(passportLocalMongoose);

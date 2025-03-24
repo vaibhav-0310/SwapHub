@@ -1,23 +1,63 @@
-<%layout("/boilerplate/bolier.ejs")%>
-<body>
-    <div class="signup-container">
-        <h1>Create Account</h1>
-        <img src="/images/swaphub2.jpg" alt="Logo">
-        <form action="/signup" method="post">
-            <div class="input-field">
-                <input type="text" placeholder="Full Name" name="username" required>
+<% layout("/boilerplate/bolier.ejs") %>
+
+<div class="container signup mr-5 mb-5 mt-5">
+    <div class="signup-box">
+        <div class="image-container">
+            <img src="/images/logo.png" alt="Logo">
+        </div>
+        <div class="form-container">
+            <h1>Create Account</h1>
+
+            <!-- Error Message (If password is weak) -->
+            <% if (error) { %>
+                <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+
+            <form action="/signup" method="POST" onsubmit="return validatePassword()">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                    <span id="togglePassword">&#128065;</span>
+                </div>
+                <!-- Warning Message -->
+                <div id="password-warning" class="text-danger mt-2"></div>
+
+                <button type="submit" class="signup-btn">SIGN UP</button>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="/login">Login</a>
             </div>
-            <div class="input-field">
-                <input type="email" placeholder="Email" name="email" required>
-            </div>
-            <div class="input-field">
-                <input type="password" placeholder="Password" name="password" required>
-            </div>
-            <button type="submit" class="signup-btn">SIGN UP</button>
-        </form>
-        <div class="login-link">
-            Already have an account? <a href="/login">Login</a>
         </div>
     </div>
-</body>
+</div>
 
+<script>
+    document.getElementById("togglePassword").addEventListener("click", function() {
+        const passwordInput = document.getElementById("password");
+        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+    });
+
+    function validatePassword() {
+        const password = document.getElementById("password").value;
+        const warning = document.getElementById("password-warning");
+
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasDigit = /\d/.test(password);
+        const hasSpecialChar = /[@$!%*?&#]/.test(password);
+
+        if (password.length < minLength || !hasUpperCase || !hasLowerCase || !hasDigit || !hasSpecialChar) {
+            warning.innerHTML = "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.";
+            return false;
+        }
+        warning.innerHTML = "";
+        return true;
+    }
+</script>

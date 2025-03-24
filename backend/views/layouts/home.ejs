@@ -1,1 +1,115 @@
 <% layout("/boilerplate/bolier.ejs") %>
+
+<div class="container-fluid home">
+
+    <div class="hero-section">
+        <div class="overlay">
+            <h1>Buy and Sell Used Products Within Your College Campus</h1>
+            <p>Find out your college needs and start buying and selling on SwapHub!</p>
+            <h2>Find Used Items Near You</h2>
+
+            <div class="search-container">
+                <div class="search-box">
+                    <select class="city-select">
+                        <option value="">Select College</option>
+                        <option value="Mumbai">Vellore Institute</option>
+                        <option value="Bangalore">VIT Bhopal</option>
+                        <option value="Delhi">AIIMS</option>
+                    </select>
+                    <input type="text" class="search-input" placeholder="Quick Search">
+                    <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </div>
+
+            <div class="categories">
+                <div class="category">
+                    <a href="/buy">
+                        <i class="fa-solid fa-handshake"></i>
+                    <span>BUY</span></a>
+                </div>
+                <div class="category">
+                    <a href="/sell">
+                    <!-- <i class="fa-solid fa-laptop"></i> -->
+                     <img src="/images/sell.png">
+                    <span>Sell</span></a>
+                </div>
+                <div class="category">
+                    <img src="/images/donate.png">
+                    <span>Donate</span>
+                </div>
+                <div class="category">
+                    <a href="/rent">
+                    <!-- <i class="fa-solid fa-couch"></i> -->
+                    <img src="/images/rent.svg">
+                    <span>Rent</span></a>
+                </div>
+                <div class="category">
+                    <!-- <i class="fa-solid fa-bicycle"></i> -->
+                    <img src="/images/exchange.svg">
+                    <span>Exchange</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="container mt-5 why" id="#whyus">
+    <p><b>What makes us unique</b></p>
+    <hr><br>
+    <p style="font-size: 15px; color: gray !important;">Student, student and ONLY student. We are dedicated to give that effortless platform <br>where only student RULES.</p>
+    <div class="row mt-3">
+      <div class=" offset-1 col-2 box mt-2">
+        <img src="./images/temple.png" style="height: 200px; width: 200px;"><br>
+       <span style="font-size: 20px; color: black !important;"><b> Make deals within your campus</b></span><br>
+       <p style="font-size: 15px; color: gray !important;"> You don't need to go far from your college campus. Ab Campus Me Bikega</p>
+      </div>
+      <div class="offset-1 col-3 box mt-2">
+         <img src="./images/hand.png"  style="height: 200px; width: 200px;"><br>
+         <span style="font-size: 20px; color: black !important;"><b> Trusted Purchase</b></span><br>
+         <p style="font-size: 15px; color: gray !important;"> Awesome! You are dealing with your college mate or any other near you.</p>
+      </div>
+      <div class="offset-1 col-3 box mt-2">
+        <img src="./images/laptop.png"  style="height: 200px; width: 200px;"><br>
+        <span style="font-size: 20px; color: black !important;"><b> Multiple Products in a Single Ad</b></span><br>
+        <p style="font-size: 15px; color: gray !important;"> You have books, notes, stationery, bikes to sell. Don't worry you can add these all items in a Single Ad.</p>
+      </div>
+    </div>    
+  </div>
+
+
+
+
+
+  <div class="container-fluid home" id="contain2">
+
+    <div class="hero-section">
+        <div class="overlay">
+            <h1>Send me the App</h1>
+            <hr><br>
+            <p>Enter your phone number <br> and we'll send you a link to download the free app</p>
+
+            <div class="search-container" style="width: 500px; margin: auto; border: radius 20% ;">
+                    <input type="number" class="search-input" placeholder="Your Phone Number">
+                    <button class="search-btn">Get App</button>
+                </div>
+            </div>
+            </div>
+            </div>
+
+
+            <div class="container mt-5 why">
+                <p><b>Trending Across your Campus</b></p>
+                <div class="row mt-3">
+                    <div class="row mt-3">
+                        <% for(ad of ads){ %>
+                        <div class=" offset-1 col-3 box mt-2 product">
+                          <img src="<%- ad.poster %>" style="height: 80%; width: 100%; "><br>
+                          <div class="content">
+                          <p><%- ad.title %></p>
+                          <p><%- ad.college %></p>
+                          </div>
+                        </div>
+                   <% } %>
+                </div>    
+              </div>

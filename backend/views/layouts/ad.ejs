@@ -1,0 +1,40 @@
+<%layout("/boilerplate/bolier.ejs")%>
+
+<body>
+    <br>
+    <div class="row">
+        <div class="col-8 offset-2">
+    <h3>Add a New Item</h3>
+    
+    <form method="post" action="/ad" novalidate class="needs-validation" >
+        <div class="mb-3"><label for="title" class="form-label">Title</label>
+            <input name="title" placeholder="Title" class="form-control" type="text" required>
+            <div class="invalid-feedback">Enter a correct Title</div>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" placeholder="" class="form-control" required></textarea>
+            <div class="invalid-feedback">Enter a correct Description</div>
+        </div>
+        <div class="mb-3">
+            <label for="poster" class="form-label">Upload Image </label>
+            <input name="poster" type="text" class="form-control" required>
+        </div>
+        <div class="row">
+        <div class="mb-3 col-md-4">
+            <label for="PostedBy" class="form-label">Posted BY</label>
+            <input name="PostedBy" placeholder="Posted By"  class="form-control" type="text" required>
+            <div class="invalid-feedback">Enter a correct Price</div>
+        </div>
+        <div class="mb-3 col-md-8">
+            <label for="college" class="form-label">College</label>
+            <input name="college" placeholder="enter college" class="form-control" type="text" required>
+            <div class="invalid-feedback">Enter a correct College name</div>
+        </div></div>
+        
+        <br>
+        <button class="btn btn-danger mb-5">Add</button>
+    </form>
+    </div>
+    </div>
+</body>

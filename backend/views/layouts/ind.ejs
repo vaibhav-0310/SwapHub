@@ -1,0 +1,21 @@
+<% layout("./boilerplate/bolier.ejs") %>
+<div class="card mt-4 showproduct" style="border: none; width: auto;">
+    <div class=" mt-4" style="margin: 50px;">
+    <div class="row g-0">
+      <div class="col-md-4 ">
+        <img src="<%= item.image %>" class="img-fluid rounded-start" >
+      </div>
+      <div class="col-md-8 ">
+        <div class="card-body">
+          <h3 class="card-title"><%= item.product.toUpperCase() %></h3><br>
+          <p class="card-text" ><%= item.description %></p><br>
+          <% if(item.category=="buy"){ %>
+          <h5 class="card-title">&#8377;&nbsp;<%= item.price %></h5><br>
+          <% } %>
+          <% if(item.category=="rent"){ %>
+            <h5 class="card-title">&#8377;&nbsp;<%= item.price %> /hour </h5><br>
+            <% } %>
+          <p class="card-text">Category: <%= item.category%></p><br>
+          <p class="card-text">College: <%= item.college%></p><br>
+          </p><br>
+          </div></div></div>

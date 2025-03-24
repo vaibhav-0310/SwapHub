@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
+import ejsmate from "ejs-mate";
 import { Strategy as LocalStrategy } from "passport-local";
 import product from "./models/product.js";
 import User from "./models/user.js";
@@ -11,9 +12,12 @@ import cookieParser from "cookie-parser";
 import { Strategy as Google } from "passport-google-oauth20";
 import 'dotenv/config';
 import major from "./Routes/major.js";
+import user from "./Routes/user.js";
 import login from "./Routes/login.js";
 import googlelogin from "./Routes/googlelogin.js";
 import cors from "cors";
+import Ad from "./models/ad.js";
+import bodyParser from "body-parser";
 
 
 const app = express();
@@ -22,10 +26,14 @@ const __dirname = path.dirname(__filename);
 const Port = process.env.PORT || 8080;
 
 // Middlewares
+app.engine("ejs",ejsmate);
+app.set("view engine","ejs");
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
+app.use(bodyParser.json());
 
 // Database Connection
 const createDB = async () => {
@@ -61,26 +69,58 @@ app.use(session({
    (accessToken,refreshToken,profile,done)=>{
        return done(null,profile)
    }));
-   passport.serializeUser((user,done)=> done(null,user));
-   passport.deserializeUser((user,done)=>done(null,user));  
+  passport.serializeUser((user, done) => {
+    done(null, user.id || user._id); 
+  });
+  passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err, null);
+    }
+});
+
    passport.use(new LocalStrategy(User.authenticate()));
-   passport.serializeUser(User.serializeUser());
-   passport.deserializeUser(User.deserializeUser());
+   
+  
  
 
-
+//local variable
+app.use(async (req, res, next) => {
+    if (req.user) {
+        try {
+            const user = await User.findById(req.user.id);
+            res.locals.currUser = user;
+        } catch (err) {
+            console.error("Error fetching user:", err);
+            res.locals.currUser = null;
+        }
+    } else {
+        res.locals.currUser = null;
+    }
+    next();
+});
+  
 
 //All routes from Routes folder to check routes
 app.use(major);
 app.use(login);
-app.use(googlelogin)
+app.use(googlelogin);
+app.use(user);
 
-app.get("/home",(req,res)=>{
-    res.redirect("http://localhost:5173/");
+app.get("/home",async(req,res)=>{
+    let ads=await Ad.find({});
+    res.render("./layouts/home.ejs",{ads});
 });
 
+app.get("/",async(reqq,res)=>{
+   res.redirect("/home");
+});
 
-
+app.get("/why",(req,res)=>{
+    res.render("./layouts/why.ejs");
+});
 // Port Listening
 app.listen(Port , () => {
     console.log("Server started");
