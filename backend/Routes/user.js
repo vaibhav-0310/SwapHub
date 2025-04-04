@@ -5,11 +5,13 @@ const router = express.Router();
 
 router.get("/dashboard/:username",async(req,res)=>{
     let username = req.params.username;
-        let user = await User.findOne({username:username}); 
+    let user = await User.findOne({username:username}).populate("products"); 
+    let products = user.products;
+    console.log({user,products});
         if (!user) {
             return res.status(404).send("User not found");
         }
-    res.render('./users/dashboard.ejs',{user});
+    res.render('./users/dashboard.ejs',{user,products});
 });
 
 export default router;

@@ -87,20 +87,20 @@ app.use(session({
  
 
 //local variable
-app.use(async (req, res, next) => {
-    if (req.user) {
-        try {
-            const user = await User.findById(req.user.id);
-            res.locals.currUser = user;
-        } catch (err) {
-            console.error("Error fetching user:", err);
+    app.use(async (req, res, next) => {
+        const currUser={};
+        if (req.user) {
+            try {
+                res.locals.currUser=req.user;
+            } catch (err) {
+                console.error("Error fetching user:", err);
+                res.locals.currUser = null;
+            }
+        } else {
             res.locals.currUser = null;
         }
-    } else {
-        res.locals.currUser = null;
-    }
-    next();
-});
+        next();
+    });
   
 
 //All routes from Routes folder to check routes
@@ -123,6 +123,6 @@ app.get("/why",(req,res)=>{
 });
 // Port Listening
 app.listen(Port , () => {
-    console.log("Server started");
+    console.log("http://localhost:8080");
 });
 

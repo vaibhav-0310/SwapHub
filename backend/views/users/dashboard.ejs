@@ -1,6 +1,32 @@
-<%layout("/boilerplate/bolier.ejs")%>
 
+<%layout("/boilerplate/bolier.ejs")%>
 <div class="container">
-    <img src="<%- user.picture %>"/>
-    <p><%- user.username %></p>
+    <div class="dashboard-container text-center">
+        <img src="<%= user.picture || 'https://via.placeholder.com/100' %>" alt="Profile Picture" class="profile-img">
+        <h2>Welcome, <%= user.username %>!</h2>
+        <p>Email: <%= user.email %></p>
+        <p>College: <%= user.college || 'Not provided' %></p>
+        <hr style="width: 100%; color: black !important;"><br>
+        <h3>Your Products</h3>
+
+        <% if (products.length > 0) { %>
+            <div class="row">
+                <% products.forEach(product => { %>
+                    <div class="col-md-4">
+                        <div class="product-card p-3">
+                            <img src="<%= product.image %>" class="product-img" alt="<%= product.product %>">
+                            <h5 class="mt-2"><%= product.product %></h5>
+                            <p><strong>Category:</strong> <%= product.category %></p>
+                            <p><%= product.description.substring(0, 50) %>...</p>
+                            <p><strong>Price:</strong> ₹<%= product.price %></p>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>No products found.</p>
+        <% } %>
+
+    </div>
 </div>
+

@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
+import product from "./product.js";
 
 let userSchema=mongoose.Schema({
     email:{
@@ -9,6 +10,11 @@ let userSchema=mongoose.Schema({
     college:{
     type:String},
     picture:String,
+    products: [{
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+    }]
+    
 });
 
 userSchema.plugin(passportLocalMongoose);

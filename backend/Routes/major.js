@@ -1,8 +1,23 @@
 import express from "express";
 import product from "../models/product.js";
 import Ad from "../models/ad.js";
+import User from "../models/user.js";
 
 const router = express.Router();
+
+const addProductToUser = async (userId, productId) => {
+    try {
+        let user = await User.findById(userId);
+        if (!user) {
+            throw new Error("User not found");
+        }
+        user.products.push(productId);
+        await user.save();
+        console.log("Product added to user successfully!");
+    } catch (error) {
+        console.error("Error adding product to user:", error.message);
+    }
+};
 
 // API Endpoints
 router.get("/buy", async (req, res) => {
@@ -29,6 +44,7 @@ router.post("/sell", async (req, res) => {
     try {
         const item = new product(req.body);
         await item.save();
+        addProductToUser(req.user._id,item.id);
         res.redirect("/home")
     } catch (e) {
         console.log(e);

@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        type: String, // Changed to a direct string for easier access
+        type: String,
         required: true
     },
     description: {
