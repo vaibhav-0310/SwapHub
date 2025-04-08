@@ -17,6 +17,9 @@ import googlelogin from "./Routes/googlelogin.js";
 import cors from "cors";
 import Ad from "./models/ad.js";
 import bodyParser from "body-parser";
+import { createServer } from "http";
+import { Server as SocketIO } from "socket.io";
+import chat from "./Routes/chat.routes.js";
 
 
 const app = express();
@@ -24,6 +27,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const Port = process.env.PORT || 8080;
 
+const server = createServer(app);
+const io = new SocketIO(server);
 // Middlewares
 app.engine("ejs",ejsmate);
 app.set("view engine","ejs");
@@ -119,7 +124,22 @@ app.get("/why",(req,res)=>{
 });
 
 // Port Listening
-app.listen(Port , () => {
-    console.log("server started at http://localhost:8080");
+// Socket.io logic
+io.on("connection", (socket) => {
+    console.log("User connected:", socket.id);
+
+    socket.on("chat message", (msg) => {
+        io.emit("chat message", msg); // Broadcast to everyone
+    });
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected:", socket.id);
+    });
 });
+
+app.use(chat);
+
+server.listen(8080, () => {
+    console.log(`Server started at http://localhost:8080`);
+}); 
 

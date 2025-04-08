@@ -1,0 +1,89 @@
+<% layout("./boilerplate/bolier.ejs") %>
+
+<style>
+  .chat-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .chat-title {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #003366;
+  }
+
+  #messages {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: white;
+    list-style: none; /* 🔥 This removes bullet points */
+    padding-left: 0;   /* 🔥 Removes default left indent */
+  }
+
+  #messages li {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #e9f5ff;
+    word-wrap: break-word;
+  }
+
+  #chatForm input {
+    height: 45px;
+  }
+
+  #chatForm button {
+    height: 45px;
+  }
+
+  @media (max-width: 576px) {
+    .chat-container {
+      padding: 1rem;
+    }
+  }
+</style>
+
+<div class="chat-container">
+  <div class="chat-title">💬 SwapHub Chat for item <%= p.product %></div>
+  <ul id="messages" class="list-group"></ul>
+  <form id="chatForm" class="d-flex">
+    <input id="messageInput" autocomplete="off" class="form-control me-2" placeholder="Type a message..." />
+    <button class="btn btn-primary" type="submit">Send</button>
+  </form>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  const form = document.getElementById('chatForm');
+  const input = document.getElementById('messageInput');
+  const messages = document.getElementById('messages');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (input.value) {
+      socket.emit('chat message', input.value);
+      input.value = '';
+    }
+  });
+
+  socket.on('chat message', (msg) => {
+    const li = document.createElement('li');
+    li.textContent = msg;
+    messages.appendChild(li);
+    messages.scrollTop = messages.scrollHeight;
+  });
+</script>
