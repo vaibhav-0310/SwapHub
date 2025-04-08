@@ -4,7 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import ejsmate from "ejs-mate";
 import { Strategy as LocalStrategy } from "passport-local";
-import product from "./models/product.js";
 import User from "./models/user.js";
 import passport from "passport";
 import session from "express-session";
@@ -30,10 +29,11 @@ app.engine("ejs",ejsmate);
 app.set("view engine","ejs");
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // Parse JSON request bodies
+app.use(express.json()); 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Database Connection
 const createDB = async () => {
@@ -49,7 +49,6 @@ createDB()
     });
 
 // Login Session
-
 app.use(session({
     secret: "vsggykjhfdszghgjhgbfdxgfhgjhfgdrsetygfd",
     resave: false,
@@ -83,9 +82,6 @@ app.use(session({
 
    passport.use(new LocalStrategy(User.authenticate()));
    
-  
- 
-
 //local variable
     app.use(async (req, res, next) => {
         const currUser={};
@@ -121,8 +117,9 @@ app.get("/",async(reqq,res)=>{
 app.get("/why",(req,res)=>{
     res.render("./layouts/why.ejs");
 });
+
 // Port Listening
 app.listen(Port , () => {
-    console.log("http://localhost:8080");
+    console.log("server started at http://localhost:8080");
 });
 
