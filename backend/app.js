@@ -20,7 +20,7 @@ import bodyParser from "body-parser";
 import { createServer } from "http";
 import { Server as SocketIO } from "socket.io";
 import chat from "./Routes/chat.routes.js";
-
+import Chat from "./models/chat.models.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -127,15 +127,28 @@ app.get("/why",(req,res)=>{
 // Socket.io logic
 io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
-
-    socket.on("chat message", (msg) => {
-        io.emit("chat message", msg); // Broadcast to everyone
+  
+    socket.on("chat message", async ({ message, productId, user }) => {
+      // Save to DB
+      const newMsg = new Chat({
+        productId,
+        user: user || "Anonymous",
+        message,
+      });
+      await newMsg.save();
+  
+      // Broadcast to everyone
+      io.emit("chat message", {
+        message: newMsg.message,
+        user: newMsg.user,
+        productId: newMsg.productId,
+      });
     });
-
+  
     socket.on("disconnect", () => {
-        console.log("User disconnected:", socket.id);
+      console.log("User disconnected:", socket.id);
     });
-});
+  });
 
 app.use(chat);
 

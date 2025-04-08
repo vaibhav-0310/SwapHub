@@ -57,7 +57,12 @@
 
 <div class="chat-container">
   <div class="chat-title">💬 SwapHub Chat for item <%= p.product %></div>
-  <ul id="messages" class="list-group"></ul>
+  <ul id="messages" class="list-group">
+    <% messages.forEach(msg => { %>
+      <li><%= msg.user %>: <%= msg.message %></li>
+    <% }) %>
+  </ul>
+  
   <form id="chatForm" class="d-flex">
     <input id="messageInput" autocomplete="off" class="form-control me-2" placeholder="Type a message..." />
     <button class="btn btn-primary" type="submit">Send</button>
@@ -66,24 +71,33 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io();
-
-  const form = document.getElementById('chatForm');
-  const input = document.getElementById('messageInput');
-  const messages = document.getElementById('messages');
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (input.value) {
-      socket.emit('chat message', input.value);
-      input.value = '';
-    }
-  });
-
-  socket.on('chat message', (msg) => {
-    const li = document.createElement('li');
-    li.textContent = msg;
-    messages.appendChild(li);
-    messages.scrollTop = messages.scrollHeight;
-  });
-</script>
+    const socket = io();
+    const form = document.getElementById('chatForm');
+    const input = document.getElementById('messageInput');
+    const messages = document.getElementById('messages');
+  
+    const productId = "<%= p._id %>";
+    const user = "<%= currUser?.username || 'Anonymous' %>";
+  
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit("chat message", {
+          message: input.value,
+          productId,
+          user
+        });
+        input.value = '';
+      }
+    });
+  
+    socket.on("chat message", (data) => {
+      if (data.productId === productId) {
+        const li = document.createElement('li');
+        li.textContent = `${data.user}: ${data.message}`;
+        messages.appendChild(li);
+        messages.scrollTop = messages.scrollHeight;
+      }
+    });
+  </script>
+  
