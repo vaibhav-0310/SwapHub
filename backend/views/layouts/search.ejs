@@ -1,0 +1,20 @@
+<% layout("./boilerplate/bolier.ejs") %>
+
+<h2 class="text-center mt-4">Search Results</h2>
+
+<div class="container-fluid row mb-5">
+  <% products.forEach(product => { %>
+    <div class="col-12 col-lg-3 col-md-4 col-sm-12 mt-4">
+      <a href="/buy/<%= product._id %>" class="all-men text-decoration-none">
+        <div class="card h-100 all">
+          <img src="<%= product.image %>" class="card-img-top" alt="product" style="height: 250px; width: 100%;">
+          <div class="card-body">
+            <p class="card-text"><b><%= product.product %></b></p>
+            <p class="card-text">&#8377;&nbsp;<%= product.price %></p>
+            <p class="card-text"><small><%= product.college %></small></p>
+          </div>
+        </div>
+      </a>
+    </div>
+  <% }) %>
+</div>

@@ -5,6 +5,15 @@ import User from "../models/user.js";
 
 const router = express.Router();
 
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    // Optional: Store the intended URL for redirect after login
+    req.session.returnTo = req.originalUrl;
+    return res.redirect("/login"); // You can also use res.status(401).send("Unauthorized") if it's an API
+  }
+
 const addProductToUser = async (userId, productId) => {
     try {
         let user = await User.findById(userId);
@@ -37,7 +46,7 @@ router.get("/buy/:id",async(req,res)=>{
 });
 
 //sell api
-router.get("/sell",(req,res)=>{
+router.get("/sell",isLoggedIn,(req,res)=>{
     res.render("./layouts/sell.ejs");
 })
 router.post("/sell", async (req, res) => {
@@ -54,7 +63,7 @@ router.post("/sell", async (req, res) => {
 
 
 //ad api
-router.get("/ad",(req,res)=>{
+router.get("/ad",isLoggedIn,(req,res)=>{
     res.render("./layouts/ad.ejs");
 });
 
@@ -87,5 +96,51 @@ router.get("/buy/:id",async(req,res)=>{
  });
  
 
+ router.get("/exchange",async(req,res)=>{
+    try {
+        const items = await product.find({});
+        res.render("./layouts/exchange.ejs",{items});
+    } catch (e) {
+        console.log(e);
+        res.redirect("/home");
+    } 
+});
+
+router.get("/work",(req,res)=>{
+    res.render("./layouts/work.ejs");
+});
+
+
+
+
+//search
+router.get('/search', async (req, res) => {
+    const { college, query } = req.query;
+
+    try {
+        const filter = {};
+
+        // Filter by college if selected
+        if (college) {
+            filter.college = college;
+        }
+
+        // Search query across 'product' name and 'description'
+        if (query) {
+            filter.$or = [
+                { product: { $regex: query, $options: 'i' } },
+                { description: { $regex: query, $options: 'i' } }
+            ];
+        }
+
+        const products = await product.find(filter);
+
+        res.render('./layouts/search.ejs', { products });
+        // Or use: res.json(products);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 export default router;

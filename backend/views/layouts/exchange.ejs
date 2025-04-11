@@ -1,0 +1,22 @@
+<% layout("./boilerplate/bolier.ejs") %>
+
+
+<div class="container-fluid row mb-5">
+  <% for(let item of items) { %>
+    <% if (item.category=="exchange"){ %>
+    <div class="col-12 col-lg-3 col-md-4 col-sm-12 mt-4">
+      <a href="/buy/<%=item._id %>" class="all-men text-decoration-none">
+        <div class="card h-100 all">
+          <img src="<%= item.image %>" class="card-img-top" alt="product" style="height: 250px; width: 100%;">
+          <div class="card-body">
+            <p class="card-text"><b><%= item.product %></b></p>
+            <p class="card-text">&#8377;&nbsp;<%= item.price %></p>
+        
+          </div>
+        </div>
+      </a>
+    </div>
+    <% } %>
+  <% } %>
+</div>
+

@@ -9,18 +9,18 @@
             <h2>Find Used Items Near You</h2>
 
             <div class="search-container">
-                <div class="search-box">
-                    <select class="city-select">
+                <form action="/search" method="GET" class="search-box">
+                    <select name="college" class="city-select">
                         <option value="">Select College</option>
                         <option value="Mumbai">Vellore Institute</option>
-                        <option value="Bangalore">VIT Bhopal</option>
+                        <option value="VIT Bhopal University">VIT Bhopal</option>
                         <option value="Delhi">AIIMS</option>
                     </select>
-                    <input type="text" class="search-input" placeholder="Quick Search">
-                    <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
+                    <input type="text" name="query" class="search-input" placeholder="Quick Search">
+                    <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
             </div>
-
+            
             <div class="categories">
                 <div class="category">
                     <a href="/buy">
@@ -34,6 +34,7 @@
                     <span>Sell</span></a>
                 </div>
                 <div class="category">
+                    
                     <img src="/images/donate.png">
                     <span>Donate</span>
                 </div>
@@ -45,7 +46,8 @@
                 </div>
                 <div class="category">
                     <!-- <i class="fa-solid fa-bicycle"></i> -->
-                    <img src="/images/exchange.svg">
+                    <a href="/exchange">
+                    <img src="/images/exchange.svg"></a>
                     <span>Exchange</span>
                 </div>
             </div>

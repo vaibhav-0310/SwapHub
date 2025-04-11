@@ -1,0 +1,150 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SwapHub | How It Works</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --red: #e63946;
+      --orange: #f77f00;
+      --white: #ffffff;
+      --black: #1a1a1a;
+      --gray: #cccccc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--white);
+      color: var(--black);
+      line-height: 1.6;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: linear-gradient(135deg, var(--red), var(--orange));
+      color: var(--white);
+      position: relative;
+    }
+
+    .logo {
+      max-width: 50px;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+
+    .subtitle {
+      margin-top: 0.5rem;
+      font-weight: 300;
+      font-size: 1.1rem;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .step {
+      background-color: var(--white);
+      border: 2px solid var(--gray);
+      padding: 1.5rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .step:hover {
+      transform: scale(1.02);
+      border-color: var(--black);
+    }
+
+    .step i {
+      font-size: 2rem;
+      color: var(--orange);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .step-content h2 {
+      color: var(--orange);
+      margin-bottom: 0.3rem;
+      font-size: 1.3rem;
+    }
+
+    .step-content p {
+      color: #333;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #f0f0f0;
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>How It Works</h1>
+    <p class="subtitle">Your go-to campus platform to Buy, Sell, Donate, and Rent</p>
+  </header>
+
+  <section class="steps">
+    <div class="step">
+      <i class="fas fa-user-plus"></i>
+      <div class="step-content">
+        <h2>1. Sign Up / Log In</h2>
+        <p>Create your account to access all SwapHub features tailored for students.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <i class="fas fa-user-tag"></i>
+      <div class="step-content">
+        <h2>2. Choose Your Role</h2>
+        <p>Be a Seller, Buyer, Donor, or Renter — or switch roles anytime.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <i class="fas fa-box-open"></i>
+      <div class="step-content">
+        <h2>3. List or Browse Items</h2>
+        <p>Add your products or browse existing listings by others.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <i class="fas fa-handshake"></i>
+      <div class="step-content">
+        <h2>4. Connect & Transact</h2>
+        <p>Chat securely and complete the swap on or off-campus.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 SwapHub. All rights reserved.</p>
+  </footer>
+</body>
+</html>
