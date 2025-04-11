@@ -68,7 +68,7 @@ app.use(session({
     passport.use(new Google({
        clientID: process.env.CLIENTID,
        clientSecret: process.env.CLIENT_SECRET,
-       callbackURL: "http://localhost:8080/auth/google/callback",
+       callbackURL: "https://swaphub-h3qp.onrender.com/auth/google/callback",
    },
    (accessToken,refreshToken,profile,done)=>{
        return done(null,profile)
