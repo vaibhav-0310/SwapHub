@@ -42,7 +42,7 @@ app.use(cookieParser());
 
 // Database Connection
 const createDB = async () => {
-    await mongoose.connect("mongodb://127.0.0.1/SwapHub");
+    await mongoose.connect(process.env.ATLAS_DB);
 };
 
 createDB()
