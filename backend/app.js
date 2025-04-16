@@ -42,7 +42,7 @@ app.use(cookieParser());
 
 // Database Connection
 const createDB = async () => {
-    await mongoose.connect(process.env.ATLAS_DB);
+    await mongoose.connect("mongodb://127.0.0.1/SwapHub");
 };
 
 createDB()
@@ -55,37 +55,31 @@ createDB()
 
 // Login Session
 app.use(session({
-    secret: "vsggykjhfdszghgjhgbfdxgfhgjhfgdrsetygfd",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-    }}));
-    app.use(passport.initialize());
-    app.use(passport.session());
-    passport.use(new Google({
-       clientID: process.env.CLIENTID,
-       clientSecret: process.env.CLIENT_SECRET,
-       callbackURL: "https://swaphub-h3qp.onrender.com/auth/google/callback",
-   },
-   (accessToken,refreshToken,profile,done)=>{
-       return done(null,profile)
-   }));
-  passport.serializeUser((user, done) => {
-    done(null, user.id || user._id); 
-  });
-  passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await User.findById(id);
-        done(null, user);
-    } catch (err) {
-        done(err, null);
-    }
-});
-
+   secret: "KiraStorage",
+   resave: false,
+   saveUninitialized: true,
+   cookie: {
+       expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+       maxAge: 7 * 24 * 60 * 60 * 1000,
+       httpOnly: true,
+   }}));
+   app.use(passport.initialize());
+   app.use(passport.session());
+   passport.use(new Google({
+      clientID: process.env.CLIENTID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: "http://localhost:8080/auth/google/callback",
+  },
+  (accessToken,refreshToken,profile,done)=>{
+      return done(null,profile)
+  }));
+  passport.serializeUser((user,done)=> done(null,user));
+  passport.deserializeUser((user,done)=>done(null,user));  
+   
    passport.use(new LocalStrategy(User.authenticate()));
+   passport.serializeUser(User.serializeUser());
+   passport.deserializeUser(User.deserializeUser());
+
    
 //local variable
     app.use(async (req, res, next) => {
