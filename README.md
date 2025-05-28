@@ -104,18 +104,11 @@
 * Admin panel for moderation
 * Mobile app version
 
-## 🧠 Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request.
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ---
 
 ```
-Built with 💙 by [Your Name] – Helping students swap smarter.
+Built with 💙 by [Vaibhav Bhargav] – Helping students swap smarter.
 ```
 
 
