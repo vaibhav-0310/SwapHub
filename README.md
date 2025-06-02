@@ -36,7 +36,7 @@
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/swaphub.git
+   git clone https://github.com/vaibhav-0310/swaphub.git
    cd swaphub
    ```
 
