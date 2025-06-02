@@ -4,7 +4,7 @@
 
 ## 📌 Features
 
-* 🧾 User registration and login (JWT-based authentication)
+* 🧾 User registration and login (Passport-based authentication)
 * 🛍️ Post ads for products (sell/donate)
 * 🔍 Search and filter items by category, condition, location
 * 💬 Integrated messaging/chat system
